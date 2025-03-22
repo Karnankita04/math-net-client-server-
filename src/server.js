@@ -3,7 +3,11 @@ async function main(port) {
   const listener = Deno.listen({ port: portNum });
 
   for await (const conn of listener) {
-    console.log(conn);
+    for await (const buffer of conn.readable) {
+      const decoder = new TextDecoder();
+      const decodedData = decoder.decode(buffer);
+      console.log("Request: ", decodedData);
+    }
   }
 }
 

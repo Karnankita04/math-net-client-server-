@@ -14,7 +14,6 @@ const calculate = (command, a, b) => {
 };
 
 const sendResponse = async (command, args, conn) => {
-  console.log(command, args);
   const encoder = new TextEncoder();
   const result = calculate(command, ...args);
   const encodedData = encoder.encode(JSON.stringify(result));
@@ -26,6 +25,7 @@ async function main(port) {
   const listener = Deno.listen({ port: portNum });
 
   for await (const conn of listener) {
+    console.log("connected");
     for await (const buffer of conn.readable) {
       const { command, args } = fetchRequest(buffer);
       sendResponse(command, args, conn);
